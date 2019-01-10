@@ -13,6 +13,8 @@
 				<li>{{bookItem.isbn}}</li>	
 			</ul>
 
+			<img :src="bookItem.coverImage" alt="">
+
 			<a href="#" @click="deleteBook(bookItem._id)">Delete</a>
 
 
@@ -115,4 +117,11 @@
 
 
 
-</script>
+</script> 
+
+<style lang="sass" scoped>
+
+img 
+	max-width: 200px
+
+</style>

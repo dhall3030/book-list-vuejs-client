@@ -32,6 +32,10 @@ const mutations = {
 	 	state.token = null 
   		state.userId = null
 
+  		localStorage.removeItem('token')
+  		localStorage.removeItem('userId')
+  		localStorage.removeItem('expirationDate')
+
 	 }
 
 
@@ -41,6 +45,18 @@ const mutations = {
 
 const actions ={
 
+
+	setLogoutTimer ({commit}, expirationTime) {
+      
+      console.log('set timer')
+
+      setTimeout(() => {
+        commit('CLEAR_AUTH')
+
+        console.log('timer done')
+      
+      }, expirationTime)
+    },
 	signup: ({commit , dispatch}, userData) => { 
 
 		
@@ -56,6 +72,11 @@ const actions ={
             .then(response =>{
              
               	console.log(response.data)
+
+              	const ONE_HOUR = 60 * 60 * 1000;
+
+              	const now = new Date()
+	            const expirationDate = new Date(now.getTime() + ONE_HOUR)
                 
                 commit('AUTH_USER',{
 
@@ -67,7 +88,9 @@ const actions ={
 
              localStorage.setItem('token',response.data.token)
 			 localStorage.setItem('userId',response.data.userId)
+			 localStorage.setItem('expirationDate', expirationDate)
 			 
+			 dispatch('setLogoutTimer', ONE_HOUR)
 
 			 router.replace('/dashboard')
 
@@ -99,8 +122,6 @@ const actions ={
 	             	const now = new Date()
 	              	const expirationDate = new Date(now.getTime() + ONE_HOUR)
 
-	                
-
 	                commit('AUTH_USER',{
 
 	                	token: response.data.token,
@@ -112,6 +133,8 @@ const actions ={
 	                localStorage.setItem('token',response.data.token)
 			 		localStorage.setItem('userId',response.data.userId)
 			 		localStorage.setItem('expirationDate', expirationDate)
+
+			 		dispatch('setLogoutTimer', ONE_HOUR)
 
 			 		router.replace('/dashboard')
 
