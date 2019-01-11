@@ -6,6 +6,7 @@ import store from './store/store'
 import Home from './components/Home.vue';
 import Books from './components/books/Books.vue';
 import AddBook from './components/books/AddBook.vue';
+import EditBook from './components/books/EditBook.vue';
 import BookProfile from './components/books/BookProfile.vue';
 import SignUp from './components/auth/SignUp.vue';
 import Login from './components/auth/Login.vue';
@@ -20,7 +21,31 @@ const routes = [
 	{path: '/home', component: Home, name: 'home'},
 	{path: '/books', component: Books, name: 'books'},
 	{path: '/add-book', component: AddBook, name: 'add-book'},
-  {path: '/book-profile/:id', component: BookProfile, name: 'book-profile'},
+  {path: '/edit-book/:id', component: EditBook, name: 'edit-book'},
+  {path: '/book-profile/:id', component: BookProfile, name: 'book-profile',
+
+
+      beforeEnter (to, from, next) { 
+      
+      //console.log(store.state.token)
+          if(store.getters.isAuthenticated == true){
+
+            next()
+
+          }else{
+
+            next('/login')
+
+          }
+
+
+      }
+    
+
+
+
+
+  },
 	
 	{path: '/', redirect: '/home' },
     {path: '*', redirect: '/' },

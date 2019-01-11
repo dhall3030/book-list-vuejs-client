@@ -15,7 +15,14 @@
 
 			<img :src="bookItem.coverImage" alt="">
 
-			<a href="#" @click="deleteBook(bookItem._id)">Delete</a>
+			<p><router-link 
+					class="nav-link" 
+					active-class="active" 
+					:to="'/edit-book/'+bookItem._id">
+					Edit
+					</router-link></p>
+
+			<p><a href="#" @click="deleteBook(bookItem._id)">Delete</a></p>
 
 
 		</div>

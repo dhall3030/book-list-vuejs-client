@@ -156,13 +156,15 @@ const actions ={
 
 		
 	},
-	autoLogin: ({commit})=>{
+	autoLogin: ({commit, dispatch})=>{
 
 		const token = localStorage.getItem('token')
 		
 		if (!token) {
          return
       	}
+      	
+
       	const expirationDate = localStorage.getItem('expirationDate')
       	const now = new Date()
       	if (now >= expirationDate) {
@@ -181,7 +183,15 @@ const actions ={
 
 	    })
 
+		const endDate = new Date(expirationDate)
 
+		console.log(endDate.getTime())
+
+		const time = (endDate.getTime() - now.getTime());
+
+		console.log(time)
+
+		dispatch('setLogoutTimer', time)
 
 
 	}
