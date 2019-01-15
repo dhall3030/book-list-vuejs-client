@@ -136,12 +136,20 @@ const actions ={
 
 			 		dispatch('setLogoutTimer', ONE_HOUR)
 
+			 		dispatch('initError', null)
+
 			 		router.replace('/dashboard')
 
 
 	            })
-	            .catch(error => console.log(error))
+	            //.catch(error => console.log(error))
+	            .catch(error => {
 
+	            	console.log(error)
+
+	            	dispatch('initError', 'Auth failed')
+
+	            })
 		
 	},
 	logout: ({commit}) =>{

@@ -9,7 +9,8 @@
 
 					<div class="input-container">
 
-
+            <div class="alert alert-danger" v-if="getMsg != null">{{getMsg}}!!</div>
+            
             <div  v-html="getError"></div> 
 
 				    <h2>Login</h2>	
@@ -66,6 +67,7 @@ export default {
       return {
         email: '',
         password: ''
+        
       }
     },
     methods: {
@@ -76,7 +78,11 @@ export default {
         }
         console.log(formData)
        
-        this.$store.dispatch('login',{email: formData.email, password: formData.password})
+        this.$store.dispatch('login',{email: formData.email, password: formData.password}) 
+
+
+
+        
       }
     },
     validations:{
@@ -119,6 +125,14 @@ export default {
         return '<div class="alert alert-danger">'+errorMsg+'</div>';
         }
       
+      },
+      getMsg(){
+
+        return this.$store.getters.error;
+
+       
+
+
       }
 
 
@@ -133,7 +147,11 @@ export default {
 
 <style lang="sass" scoped>
 
-
+=border-radius($radius)
+    -webkit-border-radius: $radius
+    -moz-border-radius:    $radius
+    -ms-border-radius:     $radius
+    border-radius:         $radius
 
 .input.invalid label 
   color: red
@@ -150,6 +168,23 @@ button[disabled]:active
   color: #ccc;
   cursor: not-allowed
   
+.alert-danger 
+  color: #a94442
+  background-color: #f2dede
+  border-color: #ebccd1
 
+
+.alert 
+  padding: 15px
+  margin: 1em 0
+  width: 100%
+  box-sizing: border-box
+  border: 1px solid transparent
+  +border-radius(4px)
+
+.alert-success 
+  color: #3c763d
+  background-color: #dff0d8
+  border-color: #d6e9c6
 
 </style>
