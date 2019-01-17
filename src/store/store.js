@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import auth  from './modules/auth';
 import book  from './modules/book';
 import error from './modules/error';
+import loading from './modules/loading';
 
 import router from '../router'
 
@@ -15,7 +16,8 @@ export default new Vuex.Store({
 	modules:{
 		auth,
 		book,
-		error
+		error,
+		loading
 
 	}
 

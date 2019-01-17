@@ -1,6 +1,16 @@
 <template>
 
-	<section>
+	
+
+
+
+  <section>
+
+      <!-- <template v-if="loading === true">
+          
+        <app-loading></app-loading>
+
+      </template> -->
 
       <div class="container">
           
@@ -46,7 +56,12 @@
 
 		  		</div>
 
-		  </main>
+		      
+        
+         
+
+
+      </main>
 
 	  </div>
 
@@ -61,14 +76,20 @@
 <script>
 
 import { required , email  } from 'vuelidate/lib/validators'
+import Loading from '../Loading.vue';
 export default {
 
 	 data () {
       return {
         email: '',
-        password: ''
+        password: '',
+        loading: false
         
       }
+    },
+    components: {
+      
+      appLoading: Loading
     },
     methods: {
       onSubmit () {
@@ -77,10 +98,22 @@ export default {
           password: this.password,
         }
         console.log(formData)
+
+        //this.loading = true
+
+        this.$store.dispatch('initLoading', true)
+
+        setTimeout(() => {
+          
+          
+
+          this.$store.dispatch('login',{email: formData.email, password: formData.password}) 
+
+        }, 3000);
        
-        this.$store.dispatch('login',{email: formData.email, password: formData.password}) 
+        
 
-
+        
 
         
       }

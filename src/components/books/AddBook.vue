@@ -57,10 +57,11 @@
 				v-model="isbn">
 			</div>
 
-			<input type="file" @change="onFileSelected">
+			<input type="file"  name="coverImg" @change="onFileSelected">
 
 			
-			 <button @click="onSubmit" :disabled="$v.$invalid">Submit</button>	
+			 <button @click="onSubmit" :disabled="$v.$invalid">Submit</button>
+			
 
 
 			</div>
@@ -86,6 +87,7 @@
 		data (){
 
 			return{
+				error: false,
 				selectedFile: null,
 				title: 'Add Book', 
 				content: 'Add new book to book list!',
@@ -203,7 +205,16 @@
           			errorMsg += "<p>The isbn field must not be empty.</p>";
 
         		}
+        		if(this.selectedFile === null && !this.$v.$invalid){
+
+          			errorMsg += "<p>Please select an image.</p>";
+
+        		}
+
         		if(errorMsg !=""){
+        			
+        			this.error = true;
+
         			return '<div class="alert alert-danger">'+errorMsg+'</div>';
         		}
 
@@ -227,3 +238,24 @@
 
 
 </script>
+
+<style lang="sass" scoped>
+
+
+.input.invalid label 
+  color: red
+
+.input.invalid input 
+  border: 1px solid #ebccd1
+  background-color: #f2dede
+
+button[disabled],
+button[disabled]:hover,
+button[disabled]:active 
+  border: 1px solid #ccc
+  background-color: transparent
+  color: #ccc;
+  cursor: not-allowed
+  
+
+</style>

@@ -1,5 +1,14 @@
 <template>
   <div id="app">
+
+    <template v-if="loading">
+          
+        <app-loading></app-loading>
+
+    </template>
+
+
+    
     <!-- <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
@@ -32,9 +41,12 @@
 
 <script>
 
+import {mapActions} from 'vuex';   
+
 import Header from './components/Header.vue';
 import Home from './components/Home.vue';
 import Footer from './components/Footer.vue';
+import Loading from './components/Loading.vue';
 
 export default {
   name: 'app',
@@ -45,7 +57,28 @@ export default {
   },
   components: {
         appHeader: Header,
-        appFooter: Footer
+        appFooter: Footer,
+        appLoading: Loading
+  },
+  methods:{
+
+         ...mapActions({
+                isLoading: 'initLoading'
+                
+                
+          }),
+
+  },
+  computed:{ 
+
+    loading(){
+
+      console.log('hello'+this.$store.getters.isLoading)
+
+      return this.$store.getters.isLoading;
+
+    }
+
   },
   created(){ 
 
@@ -94,12 +127,15 @@ a {
 }
 
 .slide-enter-active {
-  animation: slideInRight 0.5s both ease-in
+  animation: slideInRight 0.5s both ease-in;
 }
 
 .slide-leave-active {
-  animation: slideOutLeft 0.5s both ease-in
+  animation: slideOutLeft 0.5s both ease-in;
 }
+
+
+
 
 
 @keyframes slideOutLeft {

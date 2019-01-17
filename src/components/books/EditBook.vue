@@ -59,15 +59,26 @@
 				v-model="isbn">
 			</div>
 
-			<input type="file" @change="onFileSelected">
+			
+			
+			<button @click="onSubmit" :disabled="$v.$invalid">Submit</button>
 
 			
-			 <button @click="onSubmit" :disabled="$v.$invalid">Submit</button>	
+			
 
 
 			</div>
 		
+			<div>
+				
+			<input type="file" @change="onFileSelected">
+
 			
+			<button @click="updateImg">Upload Cover Image</button>		
+	        <br>
+			<img :src="bookItem.coverImage" alt="">
+
+			</div>
 
 
 		</div>
@@ -95,6 +106,7 @@
 				author: '',
 				publisher: '',
 				isbn: '',
+				coverImage: '',
 				_id: ''
 
 
@@ -148,6 +160,32 @@
 
         		this.$router.push('/books')
 
+
+			},
+			updateImg(){
+
+				const fd = new FormData(); 
+
+				fd.append('coverImage', this.selectedFile, this.selectedFile.name);
+
+				axios.patch('/books/img-update/'+this._id,fd,{headers:{
+					//'Content-Type': 'application/json',
+					Authorization: 'Bearer '+this.token},
+						onUploadProgress:  uploadEvent =>{
+
+							console.log('Upload Progress: '+ Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%');
+
+
+						}
+				})
+        		.then(res => {
+
+        			console.log(res)
+
+        			this.loadBooks(this.token);
+
+        		})
+        		.catch(error => console.log(error))
 
 			}
 
@@ -213,6 +251,7 @@
 				this.author = bookData.author;
 				this.publisher = bookData.publisher;
 				this.isbn = bookData.isbn;
+				this.coverImage = bookData.coverImage; 
 				this._id = bookData._id;
 
 
@@ -236,3 +275,11 @@
 
 
 </script>
+
+
+<style lang="sass" scoped>
+
+img 
+	max-width: 200px
+
+</style>

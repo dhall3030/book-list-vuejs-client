@@ -138,6 +138,8 @@ const actions ={
 
 			 		dispatch('initError', null)
 
+			 		dispatch('initLoading', false)
+
 			 		router.replace('/dashboard')
 
 
