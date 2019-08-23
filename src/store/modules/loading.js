@@ -3,44 +3,29 @@ import axios from 'axios'
 import router from '../../router'
 
 
-const state = { 
+const state = {
 
 	isLoading: false
-	
-	
-	
+
 };
 
 
 const mutations = {
 
-	'SET_LOADING' (state, loading) {
-
+  'SET_LOADING' (state, loading) {
 
 	 	state.isLoading = loading;
 
-	 
 	 },
-
-
-
 };
-
 
 const actions = {
 
-
-	initLoading: ({commit},loading) => {
-
+  initLoading: ({commit},loading) => {
 
 		commit('SET_LOADING', loading)
 
-		
-
-
 	}
-
-
 };
 
 const getters = {
@@ -48,11 +33,8 @@ const getters = {
 	isLoading (state) {
 
 	  return state.isLoading;
-	
+
 	}
-
-
-
 };
 
 
@@ -61,6 +43,4 @@ export default {
 	 mutations,
 	 actions,
 	 getters
-
-
 }
