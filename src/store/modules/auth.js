@@ -2,249 +2,198 @@ import axios from 'axios'
 
 import router from '../../router'
 
-const state = { 
-
-	token: null, 
+const state = {
+	token: null,
 	userId: null,
-	
-	
-	
-
 };
 
 
 const mutations = {
 
-	'AUTH_USER' (state, userData) {
+  'AUTH_USER' (state, userData) {
 
+    state.token = userData.token;
+    state.userId = userData.userId;
 
-	 	state.token = userData.token;
-	 	state.userId = userData.userId;
-	 	
+  },
+  'CLEAR_AUTH' (state) {
 
+    state.token = null 
+    state.userId = null
 
-	 	
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('expirationDate')
 
-	 
-	 },
-	 'CLEAR_AUTH' (state) {
-
-	 	state.token = null 
-  		state.userId = null
-
-  		localStorage.removeItem('token')
-  		localStorage.removeItem('userId')
-  		localStorage.removeItem('expirationDate')
-
-	 }
-
-
-
+  }
 };
 
 
 const actions ={
 
+  setLogoutTimer ({commit}, expirationTime) {
 
-	setLogoutTimer ({commit}, expirationTime) {
-      
-      console.log('set timer')
+    console.log('set timer')
 
-      setTimeout(() => {
-        commit('CLEAR_AUTH')
+    setTimeout(() => {
 
-        console.log('timer done')
-      
-      }, expirationTime)
-    },
-	signup: ({commit , dispatch}, userData) => { 
+      commit('CLEAR_AUTH')
 
-		
-			axios.post('/users/signup',{
+      console.log('timer done')
 
-				
-				email: userData.email,
-				password: userData.password
+    }, expirationTime)
+  },
+  signup: ({commit , dispatch}, userData) => {
 
+    axios.post('/users/signup',{
 
+    email: userData.email,
+    password: userData.password
 
-			})
-            .then(response =>{
-             
-              	console.log(response.data)
+    })
+    .then(response =>{
 
-              	const ONE_HOUR = 60 * 60 * 1000;
+      console.log(response.data)
 
-              	const now = new Date()
-	            const expirationDate = new Date(now.getTime() + ONE_HOUR)
-                
-                commit('AUTH_USER',{
+      const ONE_HOUR = 60 * 60 * 1000;
 
-                	token: response.data.token,
-              		userId: response.data.userId
-              		
+      const now = new Date()
+      const expirationDate = new Date(now.getTime() + ONE_HOUR)
 
-                })
+      commit('AUTH_USER',{
+        token: response.data.token,
+        userId: response.data.userId
+      })
 
-             localStorage.setItem('token',response.data.token)
-			 localStorage.setItem('userId',response.data.userId)
-			 localStorage.setItem('expirationDate', expirationDate)
-			 
-			 dispatch('setLogoutTimer', ONE_HOUR)
+      localStorage.setItem('token',response.data.token)
+      localStorage.setItem('userId',response.data.userId)
+      localStorage.setItem('expirationDate', expirationDate)
 
-			 router.replace('/dashboard')
+      dispatch('setLogoutTimer', ONE_HOUR)
 
-            })
-            .catch(error => console.log(error))
+      router.replace('/dashboard')
 
+    })
+    .catch(error => console.log(error))
 
+  },
+  login: ({commit , dispatch}, userData) => {
 
+    axios.post('/users/login',{
 
-	},
-	login: ({commit , dispatch}, userData) => {
+      email: userData.email,
+      password: userData.password
 
-			axios.post('/users/login',{
+    })
+    .then(response =>{
 
-					
-					email: userData.email,
-					password: userData.password
-					
+      console.log(response.data)
 
+      const ONE_HOUR = 60 * 60 * 1000;
 
+      const now = new Date()
+      const expirationDate = new Date(now.getTime() + ONE_HOUR)
 
-				})
-	            .then(response =>{
-	             
-	             	console.log(response.data)
+      commit('AUTH_USER',{
+        token: response.data.token,
+        userId: response.data.userId
+      })
 
-	             	const ONE_HOUR = 60 * 60 * 1000;
+      localStorage.setItem('token',response.data.token)
+      localStorage.setItem('userId',response.data.userId)
+      localStorage.setItem('expirationDate', expirationDate)
 
-	             	const now = new Date()
-	              	const expirationDate = new Date(now.getTime() + ONE_HOUR)
+      dispatch('setLogoutTimer', ONE_HOUR)
 
-	                commit('AUTH_USER',{
+      dispatch('initError', null)
 
-	                	token: response.data.token,
-	              		userId: response.data.userId
-	              		
+      dispatch('initLoading', false)
 
-	                })
-
-	                localStorage.setItem('token',response.data.token)
-			 		localStorage.setItem('userId',response.data.userId)
-			 		localStorage.setItem('expirationDate', expirationDate)
-
-			 		dispatch('setLogoutTimer', ONE_HOUR)
-
-			 		dispatch('initError', null)
-
-			 		dispatch('initLoading', false)
-
-			 		router.replace('/dashboard')
+      router.replace('/dashboard')
 
 
-	            })
-	            //.catch(error => console.log(error))
-	            .catch(error => {
+    })
+    //.catch(error => console.log(error))
+    .catch(error => {
 
-	            	console.log(error)
+      console.log(error)
 
-	            	dispatch('initError', 'Auth failed')
+      dispatch('initError', 'Auth failed')
 
-	            })
-		
-	},
-	logout: ({commit}) =>{
+    })
 
-		commit('CLEAR_AUTH')
+  },
+  logout: ({commit}) =>{
 
-		localStorage.removeItem('token')
-  		localStorage.removeItem('userId')
+    commit('CLEAR_AUTH')
 
-
-		router.replace('/login')
-
-		
-	},
-	autoLogin: ({commit, dispatch})=>{
-
-		const token = localStorage.getItem('token')
-		
-		if (!token) {
-         return
-      	}
-      	
-
-      	const expirationDate = localStorage.getItem('expirationDate')
-      	const now = new Date()
-      	if (now >= expirationDate) {
-        return
-        }
-
-		const userId = parseInt(localStorage.getItem('userId'))
-		
-
-		commit('AUTH_USER',{
-
-	          token: token,
-	          userId: userId,
-	         
+    localStorage.removeItem('token')
+    localStorage.removeItem('userId')
 
 
-	    })
-
-		const endDate = new Date(expirationDate)
-
-		console.log(endDate.getTime())
-
-		const time = (endDate.getTime() - now.getTime());
-
-		console.log(time)
-
-		dispatch('setLogoutTimer', time)
+    router.replace('/login')
 
 
-	}
+  },
+  autoLogin: ({commit, dispatch})=>{
+
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+      return
+    }
 
 
+    const expirationDate = localStorage.getItem('expirationDate')
+    const now = new Date()
+
+    if (now >= expirationDate) {
+      return
+    }
+
+    const userId = parseInt(localStorage.getItem('userId'))
 
 
+    commit('AUTH_USER',{
+      token: token,
+      userId: userId,
+    })
+
+    const endDate = new Date(expirationDate)
+
+    console.log(endDate.getTime())
+
+    const time = (endDate.getTime() - now.getTime());
+
+    console.log(time)
+
+    dispatch('setLogoutTimer', time)
+
+  }
 }
 
 const getters = {
 
+  userId (state) {
 
-	userId (state) {
+    return state.userId
 
-  		return state.userId
+  },
+  token (state) {
 
-  	},
-  	token (state) {
+    return state.token
 
-  		return state.token
+  },
+  isAuthenticated(state){
 
-  	},
-  	isAuthenticated(state){ 
+    return state.token !== null
 
-  		return state.token !== null
-
-
-
-
-  	}
-
-
-
+  }
 }
-
-
-
 
 export default {
 	 state,
 	 mutations,
 	 actions,
 	 getters
-
-
 }

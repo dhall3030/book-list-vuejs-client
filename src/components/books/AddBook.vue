@@ -87,8 +87,6 @@
         fd.append('isbn', this.isbn)
         fd.append('coverImage', this.selectedFile, this.selectedFile.name)
 
-
-
         // const payload ={
 
         // 	name: this.name,
@@ -120,7 +118,6 @@
           this.$router.push('/books')
 
         }
-
     },
 		validations:{
 

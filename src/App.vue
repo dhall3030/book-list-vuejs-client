@@ -1,47 +1,19 @@
 <template>
   <div id="app">
-
     <template v-if="loading">
-          
-        <app-loading></app-loading>
-
+      <app-loading></app-loading>
     </template>
-
-
-    
-    <!-- <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul> -->
-  <app-header></app-header>
-  
+    <app-header></app-header>
     <transition name="slide" mode="out-in">
       <router-view></router-view>
     </transition>
-
-
-  <app-footer></app-footer>
-
-
+    <app-footer></app-footer>
   </div>
-
 </template>
 
 <script>
 
-import {mapActions} from 'vuex';   
+import {mapActions} from 'vuex';
 
 import Header from './components/Header.vue';
 import Home from './components/Home.vue';
@@ -56,29 +28,20 @@ export default {
     }
   },
   components: {
-        appHeader: Header,
-        appFooter: Footer,
-        appLoading: Loading
+    appHeader: Header,
+    appFooter: Footer,
+    appLoading: Loading
   },
   methods:{
-
-         ...mapActions({
-                isLoading: 'initLoading'
-                
-                
-          }),
-
+    ...mapActions({
+      sLoading: 'initLoading'
+    }),
   },
-  computed:{ 
-
+  computed:{
     loading(){
-
       console.log('hello'+this.$store.getters.isLoading)
-
       return this.$store.getters.isLoading;
-
     }
-
   },
   created(){ 
 
@@ -86,14 +49,11 @@ export default {
 
     this.$store.dispatch('autoLogin') 
 
-     if(this.$store.getters.isAuthenticated == true){
+    if(this.$store.getters.isAuthenticated == true){
 
-        this.$router.replace('/dashboard')
+      this.$router.replace('/dashboard')
 
-     }
-
-
-
+    }
   }
 }
 </script>
@@ -134,10 +94,6 @@ a {
   animation: slideOutLeft 0.5s both ease-in;
 }
 
-
-
-
-
 @keyframes slideOutLeft {
   to {
     transform: translateX(-100%)
@@ -146,15 +102,13 @@ a {
 
 
 @keyframes slideInRight {
-  
+
   from {
-     transform: translateX(100%) 
+     transform: translateX(100%)
   }
-  to {  
+  to {
       transform: translateX(0)
   }
-
 }
-
 
 </style>
