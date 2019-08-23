@@ -1,47 +1,25 @@
 <template>
-	<section>
-		
-		<div>
-			
-			<div id="overlay">
-				
-				<div class="spinner"></div>
-
-			</div>
-		</div>
-
-
-	</section>
-	
+  <section>
+    <div>
+      <div id="overlay">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-	
-	export default {
-
-		name: 'Loading', 
-		data (){
-
-			return{
-
-				 
-				content: 'Loading...'
-
-
-			}
-
-		}
-
-
-	}
-
-
-
+  export default {
+    name: 'Loading',
+    data (){
+      return{
+       content: 'Loading...'
+      }
+    }
+  }
 </script>
 
-
 <style lang="sass" scoped>
-
 
 #overlay
   position: fixed
@@ -55,9 +33,6 @@
   background-color: rgba(0, 0, 0, 0.5)
   z-index: 2
   cursor: pointer
-
-
-
 
 .spinner
   position: absolute
